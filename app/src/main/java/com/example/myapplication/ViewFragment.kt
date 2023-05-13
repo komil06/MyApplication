@@ -56,7 +56,9 @@ class ViewFragment : Fragment() {
         binding.edit.setOnClickListener {
             Toast.makeText(context,"Edit it now",Toast.LENGTH_SHORT).show()
         }
-
+        binding.call.setOnClickListener {
+            db.callContact(contact)
+        }
 
 
         return binding.root

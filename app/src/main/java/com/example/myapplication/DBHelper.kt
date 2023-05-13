@@ -1,12 +1,18 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import android.net.Uri
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.startActivity
+
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
     companion object{
@@ -38,6 +44,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
         contentValues.put("id",contact.id)
 
         db.delete("contact","id="+contact.id,null)
+    }
+
+    fun callContact(contact: Contact){
+        val phone_intent = Intent(Intent.ACTION_CALL)
+        phone_intent.setData(Uri.parse("tel: "+contact.phone))
+
+
     }
     fun editContact(contact: Contact):Long{
         val db = this.writableDatabase

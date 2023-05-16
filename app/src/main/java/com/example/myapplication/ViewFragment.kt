@@ -1,5 +1,8 @@
 package com.example.myapplication
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.example.myapplication.databinding.FragmentViewBinding
 import java.util.jar.Manifest
@@ -46,9 +50,9 @@ class ViewFragment : Fragment() {
         binding.phone.text = contact.phone
 
         binding.delete.setOnClickListener {
-//            var myDialog = Dialog()
-//            var manager = parentFragmentManager
-//            myDialog.show(manager,"myDialog")
+            var myDialog = Dialog()
+            var manager = parentFragmentManager
+            myDialog.show(manager,"myDialog")
             db.deleteContact(contact)
             findNavController().navigate(R.id.action_viewFragment_to_contactsFragment)
         }
@@ -57,7 +61,27 @@ class ViewFragment : Fragment() {
             Toast.makeText(context,"Edit it now",Toast.LENGTH_SHORT).show()
         }
         binding.call.setOnClickListener {
-            db.callContact(contact)
+
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CALL_PHONE
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1, arrayOf(android.Manifest.permission.CALL_PHONE),
+                        1
+                    )
+                }
+            } else {
+                if (binding.phone.text.isNotEmpty()) {
+                    val callIntent = Intent(Intent.ACTION_CALL)
+                    callIntent.data = Uri.parse("tel:${binding.phone.text}")
+                    activity?.startActivity(callIntent)
+                }
+            }
+
         }
 
 

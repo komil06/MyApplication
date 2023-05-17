@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.view.isInvisible
 import androidx.navigation.fragment.findNavController
 import com.example.myapplication.databinding.FragmentContactsBinding
 
@@ -64,7 +65,7 @@ class ContactsFragment : Fragment() {
                     findNavController().navigate(R.id.action_contactsFragment_to_searchFragment)
                 }
                 R.id.delete ->{
-                    
+                    binding.contactRv.visibility = View.INVISIBLE
                 }
             }
             true
